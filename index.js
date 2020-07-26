@@ -10,16 +10,16 @@ const app = express();
 
 const port = process.env.PORT;
 
+//configure body-parser
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded());
+
 app.use(express.static('public'));
 
 app.use('/api/posts', postsRouter);
 app.use(express.static('public'));
 
 app.use('/api/comments', commentsRouter);
-
-//configure body-parser
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded());
 
 app.listen(port, () => {
   console.info(`Server running at ${port}`);
