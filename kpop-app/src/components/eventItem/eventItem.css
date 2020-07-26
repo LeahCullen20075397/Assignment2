@@ -1,0 +1,18 @@
+.eventItem {
+    font-size: 50px;
+    margin-left: 10px;
+}
+
+.ptr {
+    cursor: pointer;
+}
+
+.date, .time, .location {
+    padding-left: 40px;
+    font-style: italic;
+    font-size: 15px;
+}
+
+.eventItem > span {
+    padding-left: 10px;
+}
