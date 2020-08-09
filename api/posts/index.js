@@ -31,4 +31,13 @@ router.get('/:id', (req, res) => {
               return res.status(404).send({message: `Unable to find Post ${id}`});
 });
 
+// upvote a post
+router.post('/:id/upvote', (req, res) => {
+  const id = req.params.id;
+         if (stubAPI.upvote(id)) {
+              return res.status(200).send({message: `Post ${id} Upvoted`});
+         }
+         return res.status(404).send({message: `Unable to find Post ${id}`});
+});
+
 export default router;
