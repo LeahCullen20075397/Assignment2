@@ -39,5 +39,19 @@ router.post('/:id/upvote', (req, res) => {
          }
          return res.status(404).send({message: `Unable to find Post ${id}`});
 });
+/*
+// Delete a contact
+router.delete('/:id', (req, res) => {
+  const id = req.params.id;
+  const index = posts.map((post)=>{
+return post.id;
+}).indexOf(id);
+ if (index > -1) {
+contacts.splice(index, 1);
+     res.status(200).send({message: `Deleted post with post id: ${id}.`});
+ } else {
+   res.status(400).send({message: `Unable to find post with post id: ${id}.`});
+   }
+});*/
 
 export default router;

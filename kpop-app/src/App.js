@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import EventList from './components/eventList';
 import Form from './components/eventForm';
-import api from './dataStore/stubAPI';
+import * as api from './api';
 import _ from 'lodash';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -9,16 +9,35 @@ import Col from 'react-bootstrap/Col';
 
 
 export default class App extends Component {
-  state = {filter : ""}
+  state = {posts: [{}]};
+
+    componentDidMount() {
+        api.getAll().then(resp => {
+            this.setState({
+                posts: resp.posts
+            });
+        }).catch(console.error);
+    };
+
+  //state = {filter : ""}
   addEventItem = (event, poster, location, date, time, link) => {
-    api.add(event, poster, location, date, time ,link);
-    this.setState({});
+    api.add(event, poster, location, date, time, link)
+    .then(resp => {
+                  const newPost = {"id":resp.id, "event":event, "poster":poster, "location":location, "date":date, "time":time, "link":link, "upvotes":0, "comments":[]};
+                  this.setState({posts: this.state.posts.concat([newPost])});
+    })
   };
+     
+      
+  
   incrementUpvote = (id) => {
-    api.upvote(id);
-    this.setState({});
+    api.upvote(id).then(resp=> {
+           var upvotedPost = _.find(this.state.posts, post=>post.id == id);
+           upvotedPost.upvotes++;  
+           this.setState({})
+         }) ;
   };
-  deletePost = (key) => {
+  /*deletePost = (key) => {
     api.delete(key);
     this.setState({});
   }
@@ -27,11 +46,15 @@ export default class App extends Component {
   }
   updateFilter = (text) => {
     this.setState({filter: text.target.value});
-  }
+  }*/
   render() {
     document.body.style= 'background-image: url("https://66.media.tumblr.com/74dbe32d98265cb64e291100117b6d4a/tumblr_inline_n2590ayYaL1qhwjx8.gif")';
 
-    let posts = _.sortBy(api.getAll(), post => -post.upvotes);
+    //deleteHandler = {this.deletePost}
+
+   // let posts = _.sortBy(api.getAll(), post => -post.upvotes);
+    const posts = _.sortBy(this.state.posts, post =>
+    post.upvotes);
     return(
       
       <Container style={{width:"100%"}}>
@@ -40,8 +63,8 @@ export default class App extends Component {
           <Form handleAdd = {this.addEventItem}/>
         </Col>
         <Col sm={8}>
-          <EventList posts = {this.filter(posts)} upvoteHandler = {this.incrementUpvote}
-            deleteHandler = {this.deletePost} updateFilter={this.updateFilter}/>
+          <EventList posts = {posts} upvoteHandler = {this.incrementUpvote}
+            />
         </Col>
       </Row>
       </Container>

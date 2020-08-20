@@ -12,7 +12,16 @@ const port = process.env.PORT;
 
 //configure body-parser
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded());
+/*
+BUG: bug occurred when the line was just "app.use(bodyParser.urlencoded());" it worked fine for the
+first assignment. However at this stage bodyparser changed its constructor to require a parmeter
+when it didn't before, which made the code that previously worked no longer run
+
+FIX: added the extended parameter to bodyparser's constructor
+*/
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 
 app.use(express.static('public'));
 

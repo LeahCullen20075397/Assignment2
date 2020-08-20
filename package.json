@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --exec babel-node index.js"
+    "start": "nodemon --ignore kpop-app/* --exec babel-node index.js"
   },
   "repository": {
     "type": "git",
@@ -19,10 +19,7 @@
   "homepage": "https://github.com/LilyPieForever/Assignment2#readme",
   "devDependencies": {
     "babel-cli": "^6.26.0",
-    "babel-eslint": "^10.1.0",
     "babel-preset-env": "^1.7.0",
-    "eslint": "^7.5.0",
-    "eslint-plugin-react": "^7.20.3",
     "nodemon": "^2.0.4"
   },
   "dependencies": {
