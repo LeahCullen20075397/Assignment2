@@ -3,13 +3,19 @@ import express from 'express';
 import postsRouter from './api/posts';
 import commentsRouter from './api/comments';
 import bodyParser from 'body-parser';
+import {loadPosts} from './postsData';
+import './db';
+
+
 
 dotenv.config();
 
 const app = express();
 
 const port = process.env.PORT;
-
+if (process.env.seedDb) {
+  loadPosts();
+}
 //configure body-parser
 app.use(bodyParser.json());
 /*

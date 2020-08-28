@@ -13,9 +13,11 @@ export default class App extends Component {
 
     componentDidMount() {
         api.getAll().then(resp => {
+          console.log(resp);
             this.setState({
-                posts: resp.posts
+                posts: resp
             });
+            console.log(this.state);
         }).catch(console.error);
     };
 
@@ -23,6 +25,7 @@ export default class App extends Component {
   addEventItem = (event, poster, location, date, time, link) => {
     api.add(event, poster, location, date, time, link)
     .then(resp => {
+      console.log(this.state);
                   const newPost = {"id":resp.id, "event":event, "poster":poster, "location":location, "date":date, "time":time, "link":link, "upvotes":0, "comments":[]};
                   this.setState({posts: this.state.posts.concat([newPost])});
     })

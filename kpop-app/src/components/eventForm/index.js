@@ -47,7 +47,7 @@ export default class Form extends Component{
                 </div>
                 <div className = "form-group">
                     <input
-                        type = "text"
+                        type = "date"
                         className = "form-control"
                         placeholder = "Date"
                         value = {this.state.date}
