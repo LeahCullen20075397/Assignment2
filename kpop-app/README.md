@@ -1,102 +1,108 @@
-# BSc (Hons.) Level 8 - Assignment 1 -Single Page App.
+# BSc (Hons.) Level 8 - Assignment 2 -Web API.
 
 Name: Leah Cullen-O'Leary 20075397
 
 # Overview
 
-Basic Kpop events app, which allows a user to add an event to a 
-list of events. These events can be liked and commented on. The
-comments can also be liked. Events can be added. Delete and edit features work.
+Basic Node.js web application implementing a simple API. This app is connected
+to a Mongo Database and is deployed with basic read and write capabilities. This is
+a continuation of my Kpop app in assignment 1.
 
 Features:
-- basic routing between comments page and home page
-- interactive and dynamic behaviour
-- full CRUD functionality
-- Can follow links
-- data model: stub API; 2 entities
-- storybook support
-
-Bugs:
-    storybook shows warning about using outside functions. This
-    occurred when I imported the <Link> tag. There is no issues when running the developer tool npm.
+- API implementation
+- Implemented a Mongo Database.
 
 # Setup
 
-Started off by creating the folders and files I'd need to complete the 
-assignment. Then I imported the relevant tools I needed in this project.
-I added all the js files I needed and then imported Storybook.
+- Started off with my web app from assignment 2.
+- Made a clone of that assignment so I could work without worrying about breaking my first 
+  assignment
+- Set up and configured a dev enviroment for Node.js
+- Installed Express, Nodemon, Axios, MongoDb, etc.
 
 ## Data Model Design
 
 ![][diagram1]
 
+## Folder Breakdown
+
+![][diagram2]
+![][diagram3]
+
+## API Preview
+
 ~~~
-import React, {Component} from 'react';
-import EventList from './components/eventList';
-import Form from './components/eventForm';
-import api from './dataStore/stubAPI';
-import _ from 'lodash';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+
+import express from 'express';
+import Post from './postsModel';
+import asyncHandler from 'express-async-handler';
+
+const router = express.Router();// eslint-disable-line
+
+router.get('/', asyncHandler(async (req, res) => {
+  const posts = await Post.find();
+  return res.send(posts);
+}));
+
+// Add a post
+router.post('/', asyncHandler(async (req, res) => {
+    const newPost = req.body;
+    if (newPost) {
+          const post = await Post.create(newPost);
+          return res.status(201).send({post});
+      } else {
+         return handleError(res, err);
+      }
+}));
+
+// upvote a post
+router.post('/:id/upvotes', asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  const post = await Post.findById(id);
+  post.upvotes++;
+  await post.save();
+  return res.status(201).send({post});
+}));
+
+// get post
+router.get('/:id', asyncHandler(async (req, res) => {
+    const id = req.params.id;
+    const post = await Post.findById(id);
+    return res.send({post});
+}));
 
 
-export default class App extends Component {
-  addEventItem = (event, poster, location, date, time, link) => {
-    api.add(event, poster, location, date, time ,link);
-    this.setState({});
-  };
-  incrementUpvote = (id) => {
-    api.upvote(id);
-    this.setState({});
-  };
-  render() {
-    document.body.style= 'background-image: url("https://66.media.tumblr.com/74dbe32d98265cb64e291100117b6d4a/tumblr_inline_n2590ayYaL1qhwjx8.gif")';
 
-    let posts = _.sortBy(api.getAll(), post => -post.upvotes);
-    return(
-      
-      <Container style={{width:"100%"}}>
-     <Row>
-        <Col sm={4}>
-          <Form handleAdd = {this.addEventItem}/>
-        </Col>
-        <Col sm={8}>
-          <EventList posts = {posts} upvoteHandler = {this.incrementUpvote}/>
-        </Col>
-      </Row>
-      </Container>
-    );
-  }
-}
+/**
+ * Handle general errors.
+ * @param {object} res The response object
+ * @param {object} err The error object.
+ * @return {object} The response object
+ */
+function handleError(res, err) {
+  return res.status(500).send(err);
+};
+
+export default router;
+
 ~~~
-Main page code
 
 ## UI Design
 
-![][diagram2]
-Here I made a form which could take in details about kpop events.
-It then shows the list of events which can be commented on and liked.
-
-![][diagram3]
-Here a form is made to take in a user's comment on a particular event.
-these comments can also be liked
-
-## Routing
-
-/comments (public) - displays comments on an event
-
-## Storybook
+Event addition process
 
 ![][diagram4]
+![][diagram5]
+![][diagram6]
 
 ## Independent Learning
 
-Used react-bootstrap to style assignment, using w3 schools tutorials
+- Used stackoverflow to fix bugs I found throughout my code.
+- Used code academy to learn about Date used in my event form.
 
 [diagram1]: ./img/diagram1.png
 [diagram2]: ./img/diagram2.png
 [diagram3]: ./img/diagram3.png
 [diagram4]: ./img/diagram4.png
-
-TheRainyGamer is my second older Github. I accidently pushed up to this project on the two accounts
+[diagram5]: ./img/diagram5.png
+[diagram6]: ./img/diagram6.png

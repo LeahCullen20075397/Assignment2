@@ -15,7 +15,7 @@ export default class App extends Component {
         api.getAll().then(resp => {
           console.log(resp);
             this.setState({
-                posts: resp
+                posts: resp //Bug had to change from posts: resp.posts to this in order for concat to work
             });
             console.log(this.state);
         }).catch(console.error);
